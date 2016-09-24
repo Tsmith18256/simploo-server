@@ -18,7 +18,7 @@ The server was created using the following:
 4. Create a database called "simploo" in MySQL that can be accessed by a user named "simploo" with the password "password." Alternatively, set up your own database name/credentials and set your `DATABASE_URL` environment variable.
 5. Run `python manage.py db upgrade` to create the database.
 6. Populate the washrooms table in the database by running the seed.sql script.
-7. Run `python manage.py runserver` to start the server.
+7. Run `python manage.py runserver` to start the server. (To make the server accessible to other devices, use `python manage.py runserver -h 0.0.0.0`)
 
 ## Environment Variables
 

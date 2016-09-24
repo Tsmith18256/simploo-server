@@ -9,12 +9,25 @@ review_features = db.Table(
 )
 
 
+class SocialNetwork(db.Model):
+    __tablename__ = 'social_networks'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(31))
+
+    def __repr__(self):
+        return '<SocialNetwork %r>' % self.name
+
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.BigInteger, primary_key=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
-    first_name = db.column(db.String(255))
-    last_name = db.column(db.String(255))
+    first_name = db.Column(db.String(255))
+    last_name = db.Column(db.String(255))
+    social_network_id = db.Column(
+        db.Integer,
+        db.ForeignKey('social_networks.id')
+    )
 
     def __repr__(self):
         return '<User %r>' % self.name

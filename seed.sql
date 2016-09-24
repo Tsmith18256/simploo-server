@@ -1,4 +1,7 @@
 USE simploo;
+INSERT INTO social_networks VALUES (1, "Facebook");
+INSERT INTO social_networks VALUES (2, "Twitter");
+INSERT INTO social_networks VALUES (3, "Google");
 INSERT INTO washrooms VALUES (1, "Adanac Park", NULL, 49.2758809678, -123.0240719603, false);
 INSERT INTO washrooms VALUES (2, "Andy Livingstone Park", NULL, 49.2778209665, -123.1035990223, false);
 INSERT INTO washrooms VALUES (3, "Balaclava Park", NULL, 49.2452339944, -123.1754609494, false);

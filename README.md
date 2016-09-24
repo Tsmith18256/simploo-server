@@ -32,3 +32,9 @@ There are several environment variables that can be used to configure the applic
 ### Optional Variables
 
 - `DATABASE_URL` - Overrides the default database connection URL.
+
+## APIDoc
+
+To use the auto-generated API docs, install apiDoc (`npm install -g apidoc`) and run `apidoc` from the project root.
+
+After you have run the `apidoc` command, the documentation will be in the _doc/_ folder (open the _index.html_ file). You will have to run `apidoc` again each time the API changes for the docs to update.

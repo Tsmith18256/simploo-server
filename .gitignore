@@ -1,6 +1,9 @@
+# Python Files
 env/
-
 __pycache__
+
+# Apidoc
+doc/
 
 # IDE Files
 *.sublime-project

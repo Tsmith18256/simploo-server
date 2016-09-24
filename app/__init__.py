@@ -5,6 +5,8 @@ from config import config
 
 db = SQLAlchemy()
 
+BASE_PREFIX = '/api'
+
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -14,6 +16,12 @@ def create_app(config_name):
     db.init_app(app)
 
     from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint, url_prefix='/api')
+    from .washrooms import washrooms as washrooms_blueprint
+
+    app.register_blueprint(main_blueprint, url_prefix=BASE_PREFIX)
+    app.register_blueprint(
+        washrooms_blueprint,
+        url_prefix='{}/washrooms'.format(BASE_PREFIX)
+    )
 
     return app

@@ -1,7 +1,32 @@
 from flask import jsonify
 
 from . import washrooms
+from flask import request
+
 from ..models import Washroom
+
+HAS_WHEELCHAIR_ACCESS = 'has_wheelchair_access'
+
+
+def apply_wheelchair_filter(query, filters):
+    hwc = filters.get(HAS_WHEELCHAIR_ACCESS)
+
+    if hwc is not None:
+        if hwc.lower() == 'true':
+            return query.filter_by(has_wheelchair_access=True)
+        elif hwc.lower() == 'false':
+            return query.filter_by(has_wheelchair_access=False)
+        else:
+            raise ValueError({
+                'error_type': 'invalid_param',
+                'invalid_param': 'has_wheelchair_access',
+                'message': 'has_wheelchair_access must be "true" or "false"'
+            })
+
+
+def apply_filters(query, filters):
+    query = apply_wheelchair_filter(query, filters)
+    return query
 
 
 @washrooms.route('/', methods=['GET'])
@@ -25,7 +50,14 @@ def get_washrooms():
                                                     wheelchair-accessible.
     """
     results = []
-    for w in Washroom.query.all():
+    query = Washroom.query
+
+    try:
+        query = apply_filters(query, request.args)
+    except ValueError as err:
+        return jsonify(err.args[0]), 400
+
+    for w in query.all():
         results.append({
             'id': w.id,
             'name': w.name,

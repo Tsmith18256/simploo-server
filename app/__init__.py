@@ -21,7 +21,7 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint, url_prefix=BASE_PREFIX)
     app.register_blueprint(
         washrooms_blueprint,
-        url_prefix='/api/washrooms'
+        url_prefix='{}/washrooms'.format(BASE_PREFIX)
     )
 
     return app

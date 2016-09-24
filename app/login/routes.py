@@ -33,7 +33,7 @@ def login_facebook(access_token):
             # Not a Facebook account
             raise ValueError({})    # TODO: throw proper error
         else:
-            return parse_user(existing_user)
+            return existing_user
 
     names = response.get('name').split()
     fname = names[0]
@@ -47,10 +47,10 @@ def login_facebook(access_token):
     )
     db.session.add(user)    # save the user in the database
 
-    return parse_user(user)     # TODO:
+    return user
 
 
-@login.route('/', methods=['POST'])
+@login.route('/token', methods=['POST'])
 def login():
     if request.get_json().get('access_token') is None:
         return jsonify({
@@ -65,9 +65,11 @@ def login():
             'message': 'social_network is a required parameter'
         }), 400
     elif request.get_json().get('social_network').lower() == 'facebook':
-        res = login_facebook(request.get_json().get('access_token'))
-        print('Result: {}'.format(res))
-        return jsonify(res)
+        user = login_facebook(request.get_json().get('access_token'))
+        token = user.generate_auth_token()
+        return jsonify({
+            'access_token': token.decode('ascii')
+        })
     else:
         return jsonify({
             'error_type': 'invalid_param',

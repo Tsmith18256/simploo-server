@@ -4,6 +4,10 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     DEBUG = False
+    SOCIAL_FACEBOOK = {
+        'consumer_key': os.environ.get('FACEBOOK_APP_ID'),
+        'consumer_secret': os.environ.get('FACEBOOK_APP_SECRET')
+    }
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'mysql+pymysql://simploo:password@localhost/simploo'

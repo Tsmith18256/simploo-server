@@ -22,8 +22,12 @@ class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.BigInteger, primary_key=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
-    first_name = db.column(db.String(255))
-    last_name = db.column(db.String(255))
+    first_name = db.Column(db.String(255))
+    last_name = db.Column(db.String(255))
+    social_network_id = db.Column(
+        db.Integer,
+        db.ForeignKey('social_networks.id')
+    )
 
     def __repr__(self):
         return '<User %r>' % self.name

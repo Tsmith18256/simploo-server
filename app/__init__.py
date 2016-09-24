@@ -16,9 +16,14 @@ def create_app(config_name):
     db.init_app(app)
 
     from .main import main as main_blueprint
+    from .login import login as login_blueprint
     from .washrooms import washrooms as washrooms_blueprint
 
     app.register_blueprint(main_blueprint, url_prefix=BASE_PREFIX)
+    app.register_blueprint(
+        login_blueprint,
+        url_prefix='{}/login'.format(BASE_PREFIX)
+    )
     app.register_blueprint(
         washrooms_blueprint,
         url_prefix='{}/washrooms'.format(BASE_PREFIX)

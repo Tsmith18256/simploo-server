@@ -30,7 +30,7 @@ class User(db.Model):
     )
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<User %r>' % self.email
 
 
 class Washroom(db.Model):
@@ -68,7 +68,7 @@ class Review(db.Model):
         return (cleanliness + privacy + safety + accessibility) / 4.0
 
     def __repr__(self):
-        return '<Review %r>' % self.name
+        return '<Review %r>' % self.id
 
 
 class Feature(db.Model):

@@ -32,6 +32,27 @@ def parse_review(r):
 @reviews.route('/', methods=['POST'])
 @auth.login_required
 def create_review():
+    """
+    @api {post} /reviews/ Create review
+    @apiVersion 0.1.0
+    @apiName CreateReview
+    @apiGroup Review
+
+    @apiParam {Number}      washroom_id     The ID of the washroom the review
+                                            is for.
+    @apiParam {String}      [description]   The body text of the review.
+    @apiParam {Number{0-5}} cleanliness     The user's cleanliness rating for
+                                            the washroom.
+    @apiParam {Number{0-5}} privacy         The user's privacy rating for the
+                                            washroom.
+    @apiParam {Number{0-5}} safety          The user's safety rating for the
+                                            washroom.
+    @apiParam {Number{0-5}} accessibility   The user's accessibility rating for
+                                            the washroom.
+    @apiParam {Number[]}    [features]      An array of feature IDs for the
+                                            features this washroom has, as
+                                            selected by the user.
+    """
     features = []
     for f in request.get_json().get('features'):
         feature = Feature.query.filter_by(id=f).first()

@@ -128,6 +128,69 @@ def get_review_by_id(id):
         })
 
 
+@reviews.route('/<int:id>', methods=['PUT'])
+@auth.login_required
+def update_review_by_id(id):
+    """
+    @api {put} /reviews/:id Update review by ID
+    @apiVersion 0.1.0
+    @apiName UpdateReviewById
+    @apiGroup Review
+
+    @apiParam {Number}      id              The unique ID of the review to
+                                            update.
+    @apiParam {String}      [description]   The text body of the user's review.
+    @apiParam {Number}      [cleanliness]   The user's cleanliness rating for
+                                            the washroom.
+    @apiParam {Number}      [privacy]       The user's privacy rating for the
+                                            washroom.
+    @apiParam {Number}      [safety]        The user's safety rating for the
+                                            washroom.
+    @apiParam {Number}      [accessibility] The user's accessibility rating for
+                                            the washroom.
+    @apiParam {Number[]}    [features]      The features supported by the
+                                            washroom, as selected by the user.
+    """
+    review = Review.query.filter_by(id=id).first()
+
+    if review is None:
+        return jsonify({
+            'error_type': 'invalid_param',
+            'invalid_param': 'id',
+            'message': 'No reviews were found with the given ID'
+        }), 400
+
+    if review.user_id == g.user.id:
+        if request.get_json().get('description') is not None:
+            review.description = request.get_json().get('description')
+        if request.get_json().get('cleanliness') is not None:
+            review.cleanliness = request.get_json().get('cleanliness')
+        if request.get_json().get('privacy') is not None:
+            review.privacy = request.get_json().get('privacy')
+        if request.get_json().get('safety') is not None:
+            review.safety = request.get_json().get('safety')
+        if request.get_json().get('accessibility') is not None:
+            review.accessibility = request.get_json().get('accessibility')
+        if request.get_json().get('features') is not None:
+            features = []
+            for f in request.get_json().get('features'):
+                feature = Feature.query.filter_by(id=f).first()
+
+                if feature is not None:
+                    features.append(feature)
+
+            review.features = features
+
+        db.session.add(review)
+        return jsonify(parse_review(review))
+    else:
+        return jsonify({
+            'error_type': 'invalid_param',
+            'invalid_param': 'id',
+            'message': 'You cannot delete somebody else\'s review'
+        }), 400
+
+
 @reviews.route('/<int:id>', methods=['DELETE'])
 @auth.login_required
 def delete_review_by_id(id):

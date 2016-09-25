@@ -53,6 +53,18 @@ def create_review():
                                             features this washroom has, as
                                             selected by the user.
     """
+    existing_review = Review.query.filter_by(
+        user_id=g.user.id,
+        washroom_id=request.get_json().get('washroom_id')
+    ).first()
+
+    if existing_review is not None:
+        return jsonify({
+            'error_type': 'invalid_param',
+            'invalid_param': 'washroom_id',
+            'message': 'You cannot have two reviews for the same washroom'
+        }), 400
+
     features = []
     for f in request.get_json().get('features'):
         feature = Feature.query.filter_by(id=f).first()

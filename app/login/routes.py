@@ -1,5 +1,6 @@
 import requests
-from flask import jsonify, request
+from flask import g, jsonify, request
+from flask_httpauth import HTTPBasicAuth
 
 from . import login
 from .. import db
@@ -7,6 +8,8 @@ from ..models import User
 
 FACEBOOK_LOGIN_URL = 'https://graph.facebook.com/me?' \
                      'fields=id,email,name,name_format&access_token={}'
+
+auth = HTTPBasicAuth()
 
 
 def parse_user(u):
@@ -48,6 +51,18 @@ def login_facebook(access_token):
     db.session.add(user)    # save the user in the database
 
     return user
+
+
+@auth.verify_password
+def verify_token(token, password):
+    print("TOKEN: {}".format(token))
+    user = User.verify_auth_token(token)
+
+    if user is None:
+        return False
+
+    g.user = user
+    return True
 
 
 @login.route('/token', methods=['POST'])

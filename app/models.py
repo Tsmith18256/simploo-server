@@ -49,7 +49,7 @@ class User(db.Model):
         except BadSignature:
             return None     # invalid token
 
-        user = User.query.get(data['id'])
+        user = User.query.filter_by(id=data['id']).first()
         return user
 
     def __repr__(self):

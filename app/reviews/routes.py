@@ -29,6 +29,56 @@ def parse_review(r):
     }
 
 
+@reviews.route('/', methods=['GET'])
+def get_reviews():
+    """
+    @api {get} /reviews Get reviews
+    @apiVersion 0.1.0
+    @apiName GetReviews
+    @apiGroup Review
+
+    @apiParam {Number} [washroom_id]    The ID of the washroom to retrieve
+                                        reviews for.
+    @apiParam {Number} [user_id]        The ID of the user to retrieve reviews
+                                        for.
+
+    @apiSuccess {Number}    id              The unique ID of the review.
+    @apiSuccess {Number}    user_id         The ID of the user that wrote the
+                                            review.
+    @apiSuccess {Number}    washroom_id     The ID of the washroom being
+                                            reviewed.
+    @apiSuccess {String}    description     The text body of the user's review.
+    @apiSuccess {Number}    rating          The user's overall rating of the
+                                            washroom.
+    @apiSuccess {Number}    cleanliness     The user's cleanliness rating for
+                                            the washroom.
+    @apiSuccess {Number}    privacy         The user's privacy rating for the
+                                            washroom.
+    @apiSuccess {Number}    safety          The user's safety rating for the
+                                            washroom.
+    @apiSuccess {Number}    accessibility   The user's accessibility rating for
+                                            the washroom.
+    @apiSuccess {Object[]}  features        The features supported by the
+                                            washroom, as selected by the user.
+    """
+    query = Review.query
+
+    w_id = request.args.get('washroom_id')
+    u_id = request.args.get('user_id')
+
+    if w_id is not None:
+        query = query.filter_by(washroom_id=w_id)
+
+    if u_id is not None:
+        query = query.filter_by(user_id=u_id)
+
+    reviews = []
+    for r in query.all():
+        reviews.append(parse_review(r))
+
+    return jsonify(reviews)
+
+
 @reviews.route('/', methods=['POST'])
 @auth.login_required
 def create_review():

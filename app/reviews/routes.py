@@ -126,3 +126,53 @@ def get_review_by_id(id):
             'invalid_param': 'id',
             'message': 'No reviews were found with the given ID'
         })
+
+
+@reviews.route('/<int:id>', methods=['DELETE'])
+@auth.login_required
+def delete_review_by_id(id):
+    """
+    @api {delete} /reviews/:id Delete review by ID
+    @apiVersion 0.1.0
+    @apiName DeleteReviewByID
+    @apiGroup Review
+
+    @apiParam {Number} id   The unique ID of the review.
+
+    @apiSuccess {Number}    id              The unique ID of the review.
+    @apiSuccess {Number}    user_id         The ID of the user that wrote the
+                                            review.
+    @apiSuccess {Number}    washroom_id     The ID of the washroom being
+                                            reviewed.
+    @apiSuccess {String}    description     The text body of the user's review.
+    @apiSuccess {Number}    rating          The user's overall rating of the
+                                            washroom.
+    @apiSuccess {Number}    cleanliness     The user's cleanliness rating for
+                                            the washroom.
+    @apiSuccess {Number}    privacy         The user's privacy rating for the
+                                            washroom.
+    @apiSuccess {Number}    safety          The user's safety rating for the
+                                            washroom.
+    @apiSuccess {Number}    accessibility   The user's accessibility rating for
+                                            the washroom.
+    @apiSuccess {Object[]}  features        The features supported by the
+                                            washroom, as selected by the user.
+    """
+    r = Review.query.filter_by(id=id).first()
+
+    if r is None:
+        return jsonify({
+            'error_type': 'invalid_param',
+            'invalid_param': 'id',
+            'message': 'No reviews were found with the given ID'
+        }), 400
+
+    if r.user_id == g.user.id:
+        db.session.delete(r)
+        return jsonify(parse_review(r))
+    else:
+        return jsonify({
+            'error_type': 'invalid_param',
+            'invalid_param': 'id',
+            'message': 'You cannot delete somebody else\'s review'
+        }), 400

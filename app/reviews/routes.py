@@ -2,10 +2,19 @@ from flask import g, jsonify, request
 
 from . import reviews
 from .. import auth, db
-from ..models import Review
+from ..models import Feature, Review
 
 
 def parse_review(r):
+    features = []
+
+    for f in r.features:
+        features.append({
+            'id': f.id,
+            'name': f.name,
+            'icon': f.icon
+        })
+
     return {
         'id': r.id,
         'user_id': r.user_id,
@@ -15,7 +24,7 @@ def parse_review(r):
         'privacy': r.privacy,
         'safety': r.safety,
         'accessibility': r.accessibility,
-        'features': r.features,
+        'features': features,
         'rating': r.rating
     }
 
@@ -23,6 +32,13 @@ def parse_review(r):
 @reviews.route('/', methods=['POST'])
 @auth.login_required
 def create_review():
+    features = []
+    for f in request.get_json().get('features'):
+        feature = Feature.query.filter_by(id=f).first()
+
+        if feature is not None:
+            features.append(feature)
+
     review = Review(
         user_id=g.user.id,
         washroom_id=request.get_json().get('washroom_id'),
@@ -30,7 +46,8 @@ def create_review():
         cleanliness=request.get_json().get('cleanliness'),
         privacy=request.get_json().get('privacy'),
         safety=request.get_json().get('safety'),
-        accessibility=request.get_json().get('accessibility')
+        accessibility=request.get_json().get('accessibility'),
+        features=features
     )
     db.session.add(review)
 

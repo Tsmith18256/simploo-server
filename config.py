@@ -26,12 +26,14 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
+        'mysql+pymysql://simploo:password@localhost/simploo_test'
     TESTING = True
 
 
 class ProductionConfig(Config):
-    # TODO: remove this line after there are some properties in this class
-    TESTING = False
+    # require environment variable for production
+    SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 config = {

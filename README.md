@@ -32,6 +32,8 @@ There are several environment variables that can be used to configure the applic
 ### Optional Variables
 
 - `DATABASE_URL` - Overrides the default database connection URL.
+- `TEST_DATABASE_URL` - Overrides the default database connection URL for tests.
+- `SECRET_KEY` - Override the default secret key for generating access tokens (required for production).
 
 ## APIDoc
 

@@ -4,7 +4,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     DEBUG = False
-    SECRET_KEY = '0tRjWH29pvoQfIh2y7De6QJX62f1FTC8'
+    SECRET_KEY = '0tRjWH29pvoQfIh2y7De6QJX62f1FTC8' or \
+        os.environ.get('SECRET_KEY')
     SOCIAL_FACEBOOK = {
         'consumer_key': os.environ.get('FACEBOOK_APP_ID'),
         'consumer_secret': os.environ.get('FACEBOOK_APP_SECRET')

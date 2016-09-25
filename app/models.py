@@ -45,8 +45,10 @@ class User(db.Model):
         try:
             data = s.loads(token)
         except SignatureExpired:
+            print('Token expired')
             return None     # valid token, but expired
         except BadSignature:
+            print('Invalid token')
             return None     # invalid token
 
         user = User.query.filter_by(id=data['id']).first()

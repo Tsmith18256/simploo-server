@@ -1,15 +1,12 @@
 import requests
 from flask import g, jsonify, request
-from flask_httpauth import HTTPBasicAuth
 
 from . import login
-from .. import db
+from .. import auth, db
 from ..models import User
 
 FACEBOOK_LOGIN_URL = 'https://graph.facebook.com/me?' \
                      'fields=id,email,name,name_format&access_token={}'
-
-auth = HTTPBasicAuth()
 
 
 def parse_user(u):
@@ -65,8 +62,22 @@ def verify_token(token, password):
     return True
 
 
-@login.route('/token', methods=['POST'])
+@login.route('/', methods=['POST'])
 def login():
+    """
+    @api {post} /login/ Login
+    @apiVersion 0.1.0
+    @apiName Login
+    @apiGroup Login
+
+    @apiParam {String}              access_token    An access token from one of
+                                                    the OAuth providers.
+    @apiParam {String="facebook"}   social_network  The OAuth provider that the
+                                                    access token came from.
+
+    @apiSuccess {String} access_token   The access token that can be used for
+                                        authenticated endpoints.
+    """
     if request.get_json().get('access_token') is None:
         return jsonify({
             'error_type': 'missing_param',

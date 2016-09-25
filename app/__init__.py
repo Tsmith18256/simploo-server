@@ -21,6 +21,7 @@ def create_app(config_name):
     from .login import login as login_blueprint
     from .users import users as users_blueprint
     from .washrooms import washrooms as washrooms_blueprint
+    from .reviews import reviews as reviews_blueprint
 
     app.register_blueprint(main_blueprint, url_prefix=BASE_PREFIX)
     app.register_blueprint(
@@ -34,6 +35,10 @@ def create_app(config_name):
     app.register_blueprint(
         washrooms_blueprint,
         url_prefix='{}/washrooms'.format(BASE_PREFIX)
+    )
+    app.register_blueprint(
+        reviews_blueprint,
+        url_prefix='{}/reviews'.format(BASE_PREFIX)
     )
 
     return app

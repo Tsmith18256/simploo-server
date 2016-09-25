@@ -6,7 +6,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from . import db
 
 review_features = db.Table(
-    'user_features',
+    'review_features',
     db.Column('review', db.BigInteger, db.ForeignKey('reviews.id')),
     db.Column('feature_id', db.BigInteger, db.ForeignKey('features.id'))
 )

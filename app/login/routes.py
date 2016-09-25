@@ -1,5 +1,5 @@
 import requests
-from flask import g, jsonify, request
+from flask import current_app, g, jsonify, request
 
 from . import login
 from .. import auth, db
@@ -78,6 +78,9 @@ def login():
     @apiSuccess {String} access_token   The access token that can be used for
                                         authenticated endpoints.
     """
+    app = current_app._get_current_object()
+    token_expiration = app.config['TOKEN_EXPIRATION']
+
     if request.get_json().get('access_token') is None:
         return jsonify({
             'error_type': 'missing_param',
@@ -92,7 +95,8 @@ def login():
         }), 400
     elif request.get_json().get('social_network').lower() == 'facebook':
         user = login_facebook(request.get_json().get('access_token'))
-        token = user.generate_auth_token()
+        token = user.generate_auth_token(expiration=token_expiration)
+
         return jsonify({
             'access_token': token.decode('ascii')
         })

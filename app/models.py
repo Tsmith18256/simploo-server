@@ -1,3 +1,6 @@
+from flask import current_app
+from itsdangerous import (TimedJSONWebSignatureSerializer
+                          as Serializer, BadSignature, SignatureExpired)
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from . import db
@@ -29,8 +32,28 @@ class User(db.Model):
         db.ForeignKey('social_networks.id')
     )
 
+    def generate_auth_token(self, expiration=600):
+        app = current_app._get_current_object()
+        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        app = current_app._get_current_object()
+        s = Serializer(app.config['SECRET_KEY'])
+
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None     # valid token, but expired
+        except BadSignature:
+            return None     # invalid token
+
+        user = User.query.filter_by(id=data['id']).first()
+        return user
+
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<User %r>' % self.email
 
 
 class Washroom(db.Model):
@@ -68,7 +91,7 @@ class Review(db.Model):
         return (cleanliness + privacy + safety + accessibility) / 4.0
 
     def __repr__(self):
-        return '<Review %r>' % self.name
+        return '<Review %r>' % self.id
 
 
 class Feature(db.Model):

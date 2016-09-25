@@ -1,8 +1,6 @@
-from flask import jsonify
+from flask import jsonify, request
 
 from . import washrooms
-from flask import request
-
 from ..models import Washroom
 
 HAS_WHEELCHAIR_ACCESS = 'has_wheelchair_access'

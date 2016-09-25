@@ -1,6 +1,7 @@
 from flask import jsonify, request
 
 from . import washrooms
+from ..models import Review
 from ..models import Washroom
 
 HAS_WHEELCHAIR_ACCESS = 'has_wheelchair_access'
@@ -30,13 +31,25 @@ def apply_filters(query, filters):
 
 
 def parse_washroom(w):
+    reviews = Review.query.filter_by(washroom_id=w.id).all()
+
+    if len(reviews) == 0:
+        rating = None
+    else:
+        rating = 0
+        for review in reviews:
+            rating += review.rating
+
+        rating /= len(reviews)
+
     return {
         'id': w.id,
         'name': w.name,
         'description': w.description,
         'latitude': w.latitude,
         'longitude': w.longitude,
-        'has_wheelchair_access': w.has_wheelchair_access
+        'has_wheelchair_access': w.has_wheelchair_access,
+        'rating': rating
     }
 
 

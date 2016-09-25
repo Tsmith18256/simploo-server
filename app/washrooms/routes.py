@@ -43,7 +43,7 @@ def parse_washroom(w):
 @washrooms.route('/', methods=['GET'])
 def get_washrooms():
     """
-    @api {get} /washrooms/ Get washrooms
+    @api {get} /washrooms Get washrooms
     @apiVersion 0.1.0
     @apiName GetWashrooms
     @apiGroup Washroom

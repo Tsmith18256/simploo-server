@@ -107,3 +107,10 @@ INSERT INTO washrooms VALUES (102, "Hastings at Carral - Pigeon Park", NULL, 49.
 INSERT INTO washrooms VALUES (103, "Robson at Granville", NULL, 49.2816325000, -123.1200820000, true);
 INSERT INTO washrooms VALUES (104, "Bute at Davie", NULL, 49.2818541000, -123.1331410000, false);
 INSERT INTO washrooms VALUES (105, "Nelson Park", NULL, 49.2833780000, -123.1306770000, true);
+INSERT INTO features VALUES (1, "Has sitting toilet", NULL);
+INSERT INTO features VALUES (2, "Has squatting toilet", NULL);
+INSERT INTO features VALUES (3, "Baby changing stations", NULL);
+INSERT INTO features VALUES (4, "Wheelchair accessible", NULL);
+INSERT INTO features VALUES (5, "Hooks for belongings", NULL);
+INSERT INTO features VALUES (6, "Sanitary napkins available", NULL);
+INSERT INTO features VALUES (7, "Seat covers available", NULL);

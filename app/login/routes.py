@@ -52,7 +52,6 @@ def login_facebook(access_token):
 
 @auth.verify_password
 def verify_token(token, password):
-    print("TOKEN: {}".format(token))
     user = User.verify_auth_token(token)
 
     if user is None:

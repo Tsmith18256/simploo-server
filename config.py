@@ -15,6 +15,7 @@ class Config:
         'mysql+pymysql://simploo:password@localhost/simploo'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = False
+    TOKEN_EXPIRATION = 86400    # 24 hours
 
     @staticmethod
     def init_app(app):
@@ -34,6 +35,7 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     # require environment variable for production
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    TOKEN_EXPIRATION = 600  # 10 minutes
 
 
 config = {

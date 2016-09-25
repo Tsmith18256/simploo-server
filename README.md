@@ -7,6 +7,11 @@ The RESTful API for Simploo.
 The server was created using the following:
 
 - Python (tested on v3.5.1)
+- Flask framework with Flask-Script
+- SQLAlchemy (tested with PyMySQL)
+- Flask-Migrate for database migrations
+- Flask-HTTPAuth for access token generation and validation
+- requests for sending HTTP requests
 
 ## Setup
 

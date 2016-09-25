@@ -1,6 +1,7 @@
-from flask import jsonify
+from flask import g, jsonify, request
 
 from . import reviews
+from .. import auth, db
 from ..models import Review
 
 
@@ -17,6 +18,23 @@ def parse_review(r):
         'features': r.features,
         'rating': r.rating
     }
+
+
+@reviews.route('/', methods=['POST'])
+@auth.login_required
+def create_review():
+    review = Review(
+        user_id=g.user.id,
+        washroom_id=request.get_json().get('washroom_id'),
+        description=request.get_json().get('description'),
+        cleanliness=request.get_json().get('cleanliness'),
+        privacy=request.get_json().get('privacy'),
+        safety=request.get_json().get('safety'),
+        accessibility=request.get_json().get('accessibility')
+    )
+    db.session.add(review)
+
+    return jsonify(parse_review(review))
 
 
 @reviews.route('/<int:id>', methods=['GET'])

@@ -25,6 +25,21 @@ The server was created using the following:
 6. Populate the washrooms table in the database by running the seed.sql script.
 7. Run `python manage.py runserver` to start the server. (To make the server accessible to other devices, use `python manage.py runserver -h 0.0.0.0`)
 
+ie.
+CREATE DATABSE simploo;
+CREATE USER 'simploo'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON simploo.* TO 'simploo'@'localhost';
+FLUSH PRIVILEGES
+exit
+source env/bin/activate
+python manage.py db upgrade
+-> go back to MySQL
+USE simploo;
+SHOW TABLES;
+SOURCE seed.sql;
+SELECT * FROM washrooms;
+python manage.py runserver -h 0.0.0.0
+
 ## Environment Variables
 
 There are several environment variables that can be used to configure the application for your local machine.
